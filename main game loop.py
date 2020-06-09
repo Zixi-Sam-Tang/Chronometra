@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((1000, 700))
+screen = pygame.display.set_mode((800, 800))
 
 #title and Icon
 pygame.display.set_caption("Chronometra")
@@ -22,7 +22,7 @@ def player(move, x, y):
 PlayerX = 450
 PlayerY = 300
 move = "s"
-speed = 1
+speed = 0.5
 xChange = 0
 yChange = 0
 w = False
