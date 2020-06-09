@@ -4,18 +4,21 @@ pygame.init()
 
 screen = pygame.display.set_mode((800, 800))
 
-#title and Icon
+# title and Icon
 pygame.display.set_caption("Chronometra")
 icon = pygame.image.load('Images\Chronometra Icon.png')
 pygame.display.set_icon(icon)
 
 
-
 def player(move, x, y):
-    if move == "s": mainCharacter = pygame.image.load('Images\Main Character Front.png')
-    elif move == "a": mainCharacter = pygame.image.load('Images\Main Character Left.png')
-    elif move == "d": mainCharacter = pygame.image.load('Images\Main Character Right.png')
-    elif move == "w": mainCharacter = pygame.image.load('Images\Main Character Back.png')
+    if move == "s":
+        mainCharacter = pygame.image.load('Images\Main Character Front.png')
+    elif move == "a":
+        mainCharacter = pygame.image.load('Images\Main Character Left.png')
+    elif move == "d":
+        mainCharacter = pygame.image.load('Images\Main Character Right.png')
+    elif move == "w":
+        mainCharacter = pygame.image.load('Images\Main Character Back.png')
     screen.blit(mainCharacter, (x, y))
 
 
@@ -33,7 +36,7 @@ s = False
 # game loop
 running = True
 while running:
-
+    print(PlayerX,",", PlayerY)
     screen.fill((0, 0, 0))
 
     for event in pygame.event.get():
@@ -83,6 +86,14 @@ while running:
                     yChange = 0
 
     PlayerX += xChange
+    if PlayerX <= -20:
+        PlayerX = -20
+    elif PlayerX >= 755:
+        PlayerX = 755
     PlayerY += yChange
+    if PlayerY <= -10:
+        PlayerY = -10
+    elif PlayerY >= 745:
+        PlayerY = 745
     player(move, PlayerX, PlayerY)
     pygame.display.update()
