@@ -1,8 +1,10 @@
-import pygame
+import pygame, random, os
+
 
 pygame.init()
+global win
+win = pygame.display.set_mode((800, 800))
 
-screen = pygame.display.set_mode((1000, 700))
 
 #title and Icon
 pygame.display.set_caption("Chronometra")
@@ -11,78 +13,104 @@ pygame.display.set_icon(icon)
 
 
 
-def player(move, x, y):
-    if move == "s": mainCharacter = pygame.image.load('Images\Main Character Front.png')
-    elif move == "a": mainCharacter = pygame.image.load('Images\Main Character Left.png')
-    elif move == "d": mainCharacter = pygame.image.load('Images\Main Character Right.png')
-    elif move == "w": mainCharacter = pygame.image.load('Images\Main Character Back.png')
-    screen.blit(mainCharacter, (x, y))
+class player(object):
+    def __init__(self, x, y, move):
+        self.x = x
+        self.y = y
+        self.move = move
+        self.vel = 0.5
+    def draw(self, win):
+        if self.move != "hidden":
+            if self.move == "s": mainCharacter = pygame.image.load('Images\Main Character Front.png')
+            elif self.move == "a": mainCharacter = pygame.image.load('Images\Main Character Left.png')
+            elif self.move == "d": mainCharacter = pygame.image.load('Images\Main Character Right.png')
+            elif self.move == "w": mainCharacter = pygame.image.load('Images\Main Character Back.png')
+            win.blit(mainCharacter, (self.x, self.y))
+
+class fireball(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    def draw(self, win):
+        win.blit(pygame.image.load('Images\Fire Ball Right.png'), (self.x, self.y))
+
+class heart(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.vel = 7
+    def draw(self, win):
+        win.blit(pygame.image.load('Images\Heart.png'), (self.x, self.y))
 
 
-PlayerX = 450
-PlayerY = 300
-move = "s"
-speed = 1
-xChange = 0
-yChange = 0
-w = False
-a = False
-d = False
-s = False
+def bf(stage):
+    if stage == 1:
+        for i in range(0, 10):
+            y = random.randint(470, 647)
+            fireballs.append(fireball(10, y))
+        stage += 1
 
+def redrawGameWindow():
+    p.draw(win)
+
+
+    if bossfight:
+        win.blit(pygame.image.load('Images\Boss Fight Screen.png'), (0, 0))
+        win.blit(pygame.image.load('Images\WrathDemon.png'), (275, 0))
+        h.draw(win)
+        for fb in fireballs:
+            fb.draw(win)
+
+    pygame.display.update()
+
+
+
+bossfight = True
+global fireballs
+fireballs = []
+stage = 1
+p = player(450, 300, "s")
+h = heart(384, 574)
 # game loop
 running = True
 while running:
 
-    screen.fill((0, 0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_s:
-                yChange = speed
-                move = "s"
-                s = True
-            elif event.key == pygame.K_d:
-                xChange = speed
-                move = "d"
-                d = True
-            elif event.key == pygame.K_a:
-                xChange = -speed
-                move = "a"
-                a = True
-            elif event.key == pygame.K_w:
-                yChange = -speed
-                move = "w"
-                w = True
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                a = False
-                if d:
-                    xChange = speed
-                else:
-                    xChange = 0
-            if event.key == pygame.K_d:
-                d = False
-                if a:
-                    xChange = -speed
-                else:
-                    xChange = 0
-            if event.key == pygame.K_s:
-                s = False
-                if w:
-                    yChange = -speed
-                else:
-                    yChange = 0
-            if event.key == pygame.K_w:
-                w = False
-                if s:
-                    yChange = speed
-                else:
-                    yChange = 0
 
-    PlayerX += xChange
-    PlayerY += yChange
-    player(move, PlayerX, PlayerY)
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_s] and not bossfight:
+        p.y += p.vel
+        p.move = "s"
+    elif keys[pygame.K_s] and bossfight and h.y <= 657:
+        h.y += h.vel
+    if keys[pygame.K_d] and not bossfight:
+        p.x += p.vel
+        p.move = "d"
+    elif keys[pygame.K_d] and bossfight and h.x <= 473:
+        h.x += h.vel
+    if keys[pygame.K_a] and not bossfight:
+        p.x -= p.vel
+        p.move = "a"
+    elif keys[pygame.K_a] and bossfight and h.x >= 295:
+        h.x -= h.vel
+    if keys[pygame.K_w] and not bossfight:
+        p.y -= p.vel
+        p.move = "w"
+    elif keys[pygame.K_w] and bossfight and h.y >= 480:
+        h.y -= h.vel
+    if bossfight and stage <= 3:
+        p.move = "hidden"
+        bf(stage)
+        stage += 1
+
+    for fb in fireballs:
+        if fb.x > 0 and fb.x < 800:
+            fb.x += 10
+        else:
+            fireballs.pop(fireballs.index(fb))
+    win.fill((0, 0, 0))
+    redrawGameWindow()
     pygame.display.update()
