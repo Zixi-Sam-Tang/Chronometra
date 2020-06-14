@@ -1,4 +1,4 @@
-import pygame, random, os
+import pygame, random, os, pytmx
 
 
 pygame.init()
@@ -10,8 +10,6 @@ win = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Chronometra")
 icon = pygame.image.load('Images\Chronometra Icon.png')
 pygame.display.set_icon(icon)
-
-
 
 class player(object):
     def __init__(self, x, y, move):
@@ -53,8 +51,6 @@ class heart(object):
             if fb.x >= h.x - 16 and fb.x <= h.x + 16 and fb.y >= h.y - 16 and fb.y <= h.y + 16:
                 fireballs.pop(fireballs.index(fb))
                 self.rage += 5
-
-
 
 def redrawGameWindow():
     p.draw(win)
