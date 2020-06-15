@@ -166,10 +166,7 @@ def redrawGameWindow():
             win.blit(txt, (70, 400))
             win.blit(txt2, (350, 500))
 
-
-
     pygame.display.update()
-
 
 global compliment
 compliment = 0
@@ -292,7 +289,6 @@ while running:
             fb.x += fb.vel
         else:
             fireballs.pop(fireballs.index(fb))
-
 
     if t.timer == 30:
         bossfight = True
