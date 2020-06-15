@@ -1,5 +1,6 @@
 import pygame, random, math
 
+
 pygame.init()
 global win
 win = pygame.display.set_mode((800, 800))
@@ -9,6 +10,8 @@ win = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Chronometra")
 icon = pygame.image.load('Images\Chronometra Icon.png')
 pygame.display.set_icon(icon)
+
+
 
 class player(object):
     def __init__(self, x, y, move):
@@ -47,14 +50,14 @@ class heart(object):
 
     def hit(self):
         for fb in fireballs:
-            if fb.x >= h.x - 16 and fb.x <= h.x + 16 and fb.y >= h.y - 16 and fb.y <= h.y + 16:
+            if fb.x >= self.x - 16 and fb.x <= self.x + 16 and fb.y >= self.y - 16 and fb.y <= self.y + 16:
                 fireballs.pop(fireballs.index(fb))
-                self.rage += 5
+                self.rage += 8
         for fs in fireSpirits:
-            if fs.x >= h.x - 16 and fs.x <= h.x + 16 and fs.y >= h.y - 16 and fs.y <= h.y + 16:
+            if fs.x >= self.x - 16 and fs.x <= self.x + 16 and fs.y >= self.y - 16 and fs.y <= self.y + 16:
                 fireSpirits.pop(fireSpirits.index(fs))
-                self.rage += 3
-        if len(lasers) != 0 and lasers[0].status == "shoot" and h.y >= lasers[0].y - 50 and h.y <= lasers[0].y + 15:
+                self.rage += 5
+        if len(lasers) != 0 and lasers[0].status == "shoot" and self.y >= lasers[0].y - 50 and self.y <= lasers[0].y + 15:
             self.rage += 5
 
 
@@ -120,6 +123,8 @@ class fireSpirit(object):
         self.timer = 0
     def draw(self, win):
         win.blit(pygame.image.load('Images\Fire Spirit.png'), (int(self.x), int(self.y)))
+
+
 
 
 def redrawGameWindow():
